@@ -1,0 +1,50 @@
+body {
+    margin: 0;
+    box-sizing: border-box;
+    font-family: 'Open Sans', sans-serif;
+    background-image: url(./img/background.jpg);
+    height: 100vh;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.navBar{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FE3640;
+    height: 50px;
+}
+
+.navBar img {
+    height: 30px;
+}
+
+.searchsection {
+    height: 30px;
+    display: flex;
+    align-items: center;
+}
+
+#pokedex { /*# spricht eine ID an und keine Klasse!!*/    
+    max-height: 50vh;
+    background-color: #FB6C6C;
+    color: white;
+    display: flex;
+    padding: 24px;
+}
+
+.info-container{
+    background-color: white;
+    border-top-left-radius: 40px;
+    border-top-right-radius: 40px;
+    margin-top: -40px;
+    min-height: 100px;
+}
+
+.info-container img {
+    margin-top: -100px;
+    width: 200px;
+
+}
