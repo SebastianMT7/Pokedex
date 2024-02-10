@@ -1,30 +1,34 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-    <script src="script.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <link rel="stylesheet" href="style.css">
-    <link rel="stylesheet" href="fonts.css">
+  <script src="script.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <link rel="stylesheet" href="style.css">
+  <link rel="stylesheet" href="fonts.css">
+  <link rel="shortcut icon" href="./img/icon.png" />
 
-    <title>Pokedex</title>
+  <title>Pokedex</title>
 </head>
-<body onload="loadPokemon()">
 
-     <nav class="navBar">
-        <div class="searchsection"><input type="text" placeholder="Search..">
-            <img src="./img/search.png" alt="searchicon">
-        </div>
-     </nav>
-    <div id="pokedex">
-       <h1 id="pokemonName"></h1>
-       
-      </div>
+<body onload="init()">
 
-      <div class="info-container">
-        <img id="pokemonImg" src="#" alt="Pokemon picture">
-      </div>
+  <nav class="navBar">
+    <div class="searchsection"><input type="text" placeholder="Search..">
+      <img src="./img/search.png" alt="searchicon">
+    </div>
+  </nav>
+  <section id="pokedex">
+  </section>
+  <section class="BtnSection">
+    <button id="BtnLoad" onclick="morePokemon()">load more</button>
+  </section>
+
+  <!--beddb-->
+  <div id="overallDetailCard"></div>
 </body>
+
 </html>
