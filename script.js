@@ -22,20 +22,17 @@ async function init() {
 async function loadPokedex() {
   for (let i = 0; i < allPokemon.length; i++) {
     //let currentPokemon = allPokemon[i];
-    console.log('currentpoke', allPokemon[i]);
-    document.getElementById('pokedex').innerHTML += cardsHTML(i);
+        document.getElementById('pokedex').innerHTML += cardsHTML(i);
   }
 }
 
 function typeRender(i) {
-  let pokeTypes = allPokemon[i]['types'];
-  
+  let pokeTypes = allPokemon[i]['types'];  
   let HTML ='';
   for (let j = 0; j <= pokeTypes.length-1; j++) {
     let type = pokeTypes[j]['type']['name'];
-    console.log('type', type);
     HTML += `
-      <div class="type">${type}</div>
+      <div class="type">${upperCase(type)}</div>
     `;
   }
   return HTML;
@@ -51,7 +48,8 @@ function cardsHTML(i) {
   let pokeName = allPokemon[i]['name']; 
   let pokeId = allPokemon[i]['id']      
   let pokeImg = allPokemon[i]['sprites']['other']['official-artwork']['front_default'];
-
+  console.log('currentpoke', allPokemon[i]);
+  showDetailCard(0); //wieder löschen!!
   return `        
     <div onclick="showDetailCard(${i})" class="card">
       <div class="cardTop">
@@ -59,15 +57,17 @@ function cardsHTML(i) {
         <span>#${correctedId(pokeId)}</span>
       </div>
       <div class="cardBottom">
-        <div id="pokeTypes" class="cardType">${upperCase(typeRender(i))}</div>
+        <div id="pokeTypes" class="cardType">${typeRender(i)}</div>
         <img src=${pokeImg} alt="Pokemon img">
       </div>
     </div>
       `;
 }
 
-function showDetailCard(currentPokemon, name, id) {
-  let img = currentPokemon['sprites']["other"]["official-artwork"]["front_default"]
+function showDetailCard(i) {
+  let img = allPokemon[i]['sprites']["other"]["official-artwork"]["front_default"]
+  let name = allPokemon[i]['name']; 
+  let id = allPokemon[i]['id']
 
   document.getElementById(`overallDetailCard`).innerHTML = `
   
@@ -77,54 +77,67 @@ function showDetailCard(currentPokemon, name, id) {
         <h1>${upperCase(name)}</h1>
         <span>#${correctedId(id)}</span>
       </div>
-      <div class="detailType">
-        <div id="typ_1${id}" class="type">Poison</div>
-        <div id="typ_2${id}" class="type">Grass</div>
-      </div>
+      <div class="detailType">${typeRender(i)}</div>
       <div class="imgPositiion">
-        <img class="detailImg" id="PkmDetailImg${id}" src=# alt="Pokemon img">
+        <img class="detailImg" id="PkmDetailImg" src=${img} alt="Pokemon img">
       </div>
     </div>
     <div class="infoContainer">
       <div class="infoMenü">
-        <span onclick="showSpecs(${currentPokemon})">About</span>
-        <span onclick="showStats(${currentPokemon})">Base Stats</span>
-        <span onclick="showEvo(${currentPokemon})">Evolution</span>
+        <span onclick="showSpecs(${i})">About</span>
+        <span onclick="showStats(${i})">Base Stats</span>
+        <span onclick="showEvo(${i})">Evolution</span>
       </div>
-      <div id="detailContent">Test
+      <div id="detailContent">
       </div>
     </div>
   `;
-  document.getElementById(`PkmDetailImg${id}`).src = img;
-  typeAmount(currentPokemon, id);
+  showSpecs(i);
 }
 
-function showSpecs(currentPokemon) {
-  let height = currentPokemon['height'];
-  let weight = currentPokemon['weight'];
-  let ability_1 = currentPokemon['abilities']['0']['ability']['name'];
-  let ability_2 = currentPokemon['abilities']['1']['ability']['name'];
+
+
+function showSpecs(i) {
+  let height = allPokemon[i]['height'];
+  let weight = allPokemon[i]['weight'];
+  let ability_1 = allPokemon[i]['abilities']['0']['ability']['name'];
+  let ability_2 = allPokemon[i]['abilities']['1']['ability']['name']; 
+
   document.getElementById('detailContent').innerHTML = '';
   document.getElementById('detailContent').innerHTML = `
   
   <table>
     <tr>
-      <td>Height</td>
-     <td>${height}</td>
+      <td class="tdAbout">Height</td>
+     <td class="tdSpecs">${correctedSpec(height)}m</td>
     </tr>
     <tr>
-      <td>Weight</td>
-      <td>${weight}</td>
+      <td class="tdAbout">Weight</td>
+      <td class="tdSpecs">${correctedSpec(weight)}kg</td>
     </tr>
     <tr>
-      <td>Abilities</td>
-     <td>${ability_1}, ${ability_2}</td>
+      <td class="tdAbout">Abilities</td>
+     <td class="tdSpecs">${upperCase(ability_1)}, ${upperCase(ability_2)}</td>
     </tr>
-  </table>
-  
+  </table>  
   `;
-
 }
+
+function showStats(i){
+  document.getElementById('detailContent').innerHTML = '';
+}
+
+function showEvo(i){
+  document.getElementById('detailContent').innerHTML = '';
+}
+
+function correctedSpec(spec){
+  //document.getElementById('endSum').innerHTML = `${EndSum.toFixed(2).replace('.', ',')}€`;
+  let newSpec = spec / 10;
+  return newSpec;
+}
+
+
 
 function closeDetailCard() {
   document.getElementById(`overallDetailCard`).innerHTML = '';
