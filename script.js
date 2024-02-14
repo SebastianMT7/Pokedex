@@ -1,7 +1,7 @@
 
 let url = 'https://pokeapi.co/api/v2/pokemon/';//https://pokeapi.co/api/v2/pokemon/?limit=${maxLoad}
 let allPokemon = [];
-let maxLoad = 6;
+let maxLoad = 10;
 let minLoad = 1;
 
 
@@ -22,36 +22,43 @@ async function init() {
 async function loadPokedex() {
   for (let i = 0; i < allPokemon.length; i++) {
     //let currentPokemon = allPokemon[i];
-        document.getElementById('pokedex').innerHTML += cardsHTML(i);
+    document.getElementById('pokedex').innerHTML += cardsHTML(i);
+    cardsColor(i);
   }
 }
 
+function cardsColor(i) {
+  let type = allPokemon[i]['types']['0']['type']['name'];
+  return type;
+}
+
 function typeRender(i) {
-  let pokeTypes = allPokemon[i]['types'];  
-  let HTML ='';
-  for (let j = 0; j <= pokeTypes.length-1; j++) {
+  let pokeTypes = allPokemon[i]['types'];
+  let HTML = '';
+  for (let j = 0; j <= pokeTypes.length - 1; j++) {
     let type = pokeTypes[j]['type']['name'];
     HTML += `
       <div class="type">${upperCase(type)}</div>
     `;
   }
   return HTML;
+
 }
 
 function morePokemon() {
-  maxLoad = maxLoad + 3;
+  maxLoad = maxLoad + 1;
   document.getElementById('pokedex').innerHTML = ''; //läd alle cards neu -> anpassen!!
-  loadPokedex();
+  loadPokedex();//eig init()
 }
 
 function cardsHTML(i) {
-  let pokeName = allPokemon[i]['name']; 
-  let pokeId = allPokemon[i]['id']      
+  let pokeName = allPokemon[i]['name'];
+  let pokeId = allPokemon[i]['id']
   let pokeImg = allPokemon[i]['sprites']['other']['official-artwork']['front_default'];
-  console.log('currentpoke', allPokemon[i]);
-  showDetailCard(0); //wieder löschen!!
+  console.log('currentpoke', allPokemon[i]); //wieder löschen!!
+
   return `        
-    <div onclick="showDetailCard(${i})" class="card">
+    <div onclick="showDetailCard(${i})" class="card ${cardsColor([i])}">
       <div class="cardTop">
         <h1>${upperCase(pokeName)}</h1>
         <span>#${correctedId(pokeId)}</span>
@@ -66,12 +73,12 @@ function cardsHTML(i) {
 
 function showDetailCard(i) {
   let img = allPokemon[i]['sprites']["other"]["official-artwork"]["front_default"]
-  let name = allPokemon[i]['name']; 
+  let name = allPokemon[i]['name'];
   let id = allPokemon[i]['id']
 
   document.getElementById(`overallDetailCard`).innerHTML = `
   
-      <div class="detailCard">
+      <div class="detailCard ${cardsColor([i])}">
       <div class="closeDetailCard" onclick="closeDetailCard()">X</div>
       <div class="cardTop">
         <h1>${upperCase(name)}</h1>
@@ -87,21 +94,21 @@ function showDetailCard(i) {
         <span onclick="showSpecs(${i})">About</span>
         <span onclick="showStats(${i})">Base Stats</span>
         <span onclick="showEvo(${i})">Evolution</span>
+        <span onclick="showMoves(${i})">Moves</span>
       </div>
       <div id="detailContent">
       </div>
     </div>
   `;
+  cardsColor(i);
   showSpecs(i);
 }
-
-
 
 function showSpecs(i) {
   let height = allPokemon[i]['height'];
   let weight = allPokemon[i]['weight'];
   let ability_1 = allPokemon[i]['abilities']['0']['ability']['name'];
-  let ability_2 = allPokemon[i]['abilities']['1']['ability']['name']; 
+  let ability_2 = allPokemon[i]['abilities']['1']['ability']['name'];
 
   document.getElementById('detailContent').innerHTML = '';
   document.getElementById('detailContent').innerHTML = `
@@ -123,21 +130,66 @@ function showSpecs(i) {
   `;
 }
 
-function showStats(i){
+function showStats(i) {
+  let currentPokemon = allPokemon[i]['stats'];
   document.getElementById('detailContent').innerHTML = '';
+  document.getElementById('detailContent').innerHTML = `<table id="statTable"></table>`;
+
+  for (let y = 0; y < currentPokemon.length; y++) {
+    let statName = upperCase(currentPokemon[y]['stat']['name']);
+    let statNumber = currentPokemon[y]['base_stat'];
+
+    document.getElementById('statTable').innerHTML += statsHTML(statName, statNumber);
+  }
 }
 
-function showEvo(i){
-  document.getElementById('detailContent').innerHTML = '';
+function statsHTML(name, number) {
+  return ` 
+    <td class="tdAbout">${name}</td>        
+    <td id="specNumber"><label>${number}</label></td>
+    <td>
+      <progress max="200" value="${number}"></progress> 
+    </td>   
+   `;
+  //max evtl auf 255 -> laut inet höchste base stat nummer
 }
 
-function correctedSpec(spec){
-  //document.getElementById('endSum').innerHTML = `${EndSum.toFixed(2).replace('.', ',')}€`;
-  let newSpec = spec / 10;
+async function showEvo(i) {
+  let response = await fetch(allPokemon[i]['species']['url']);
+  currentPokemonJSON = await response.json();
+  let EvoURL = await fetch(currentPokemonJSON['evolution_chain']['url']);
+  EvoJSON = await EvoURL.json();
+
+  let Evo_1Url = await fetch(EvoJSON['chain']['evolves_to']['0']['species']['url']);//
+  Evo_1JSON = await Evo_1Url.json();
+
+  Evo_1Name = Evo_1JSON['name']
+  Evo_1Img = Evo_1JSON['name']
+
+  console.log('1', EvoJSO); //wieder löschen!!
+  console.log('url', Evo_1JSON); //wieder löschen!!
+  console.log('Evo', Evo_1Name); //wieder löschen!!
+  document.getElementById('detailContent').innerHTML = '';
+}
+//let url = pokemonSpezies[0]['evolution_chain']['url'];
+//<p>${responseAsJson['chain']['species']['name']}</p>
+
+function showMoves(i) {
+  document.getElementById('detailContent').innerHTML = '';
+  document.getElementById('detailContent').innerHTML = `<div id="overallMovesDiv"></div>`;
+  let moves = allPokemon[i]['moves'];
+  for (let n = 0; n < moves.length; n++) {
+    let currentMove = moves[n]['move']['name'];
+    document.getElementById('overallMovesDiv').innerHTML += `<div class="movesDiv">${currentMove}</div>`;
+  }
+}
+
+function correctedSpec(spec) {
+  let result = spec / 10;
+  let newSpec = JSON.stringify(result);
+  newSpec = newSpec.replace('.', ',');
   return newSpec;
 }
-
-
 
 function closeDetailCard() {
   document.getElementById(`overallDetailCard`).innerHTML = '';
