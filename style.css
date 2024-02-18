@@ -31,8 +31,7 @@ body {
     /*# spricht eine ID an und keine Klasse!!*/
     display: flex;
     flex-wrap: wrap;
-    margin-top: 200px;
-    margin-left: 30px;
+    margin: 200px 30px 0 30px;
 }
 
 .card {
@@ -90,7 +89,7 @@ body {
     font-weight: bold;
     height: 30px;
     width: 50px;
-    background-color:rgba(255, 255, 255, 0.5);
+    background-color: rgba(255, 255, 255, 0.5);
     border-radius: 43px;
     padding: 8px 12px;
     color: white;
@@ -106,6 +105,7 @@ body {
 .BtnSection {
     display: flex;
     justify-content: center;
+    margin: 20px 0 50px 0;
 }
 
 #BtnLoad {
@@ -120,15 +120,24 @@ body {
     background-color: #f95e66;
 }
 
-#overallDetailCard {
+#openedDetailCard {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     position: fixed;
-    top: 10vh;
-    left: 20vh;
-    width: 400px;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: rgba(0, 0, 0, 0.7);
+    }
+
+.overallDetailCard {
+    width: 40vh;
+    margin: 0 20px;
 }
 
 .detailCard {
-    background-color: green;
     border-top-left-radius: 40px;
     border-top-right-radius: 40px;
     padding: 40px 24px 0 24px;
@@ -157,18 +166,32 @@ body {
 
 .imgPositiion {
     display: flex;
-    justify-content: center;
+    justify-content: space-around;
+    align-items: center;
+    gap: 10px;
 }
 
 .detailImg {
     width: 70%;
 }
 
+.arrowImg {
+    width: 20px;
+    height: 30px;
+}
+
+.arrowImg {
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.5);
+    padding: 8px;
+    border-radius: 40px;
+}
+
 .infoMenü {
     display: flex;
     justify-content: space-between;
     padding: 0 25px;
-    color: rgb(123, 123, 123);    
+    color: rgb(123, 123, 123);
     font-weight: bold;
 }
 
@@ -179,42 +202,114 @@ body {
     text-underline-offset: 10px;
 }
 
-#detailContent{
+#detailContent {
     padding: 25px;
+    height: 230px;
 }
 
-.tdAbout{
-    color: rgb(123, 123, 123); 
-    font-weight: bold;  
-    padding: 0 30px 15px 0; 
+.tdAbout {
+    color: rgb(123, 123, 123);
+    font-weight: bold;
+    padding: 0 30px 15px 0;
 }
 
-.tdSpecs{
-    font-weight: bold;  
-    padding-bottom: 15px; 
+.tdSpecs {
+    font-weight: bold;
+    padding-bottom: 15px;
 }
 
-#specNumber{
+#specNumber {
     font-weight: bold;
     padding-right: 15px;
 }
 
-progress{
+progress {
     height: 20px;
 }
 
-#overallMovesDiv{
+#overallMovesDiv {
     display: flex;
     flex-wrap: wrap;
-    overflow: scroll;    
-    height: 300px;
+    overflow: scroll;
+    min-height: 100px;
+    max-height: 230px;
 }
 
-.movesDiv{
+.movesDiv {
     background-color: black;
     color: white;
     border-radius: 43px;
     padding: 8px 12px;
     margin-right: 5px;
     margin-bottom: 5px;
+    height: 20px;
+}
+
+#loadingScreen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    width: 100%;
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-color: rgba(0, 0, 0, 0.7);    
+    z-index: -0;
+}
+
+#loadingScreen img {
+    height: 200px;
+    opacity: 1;
+    z-index: 50;
+    animation: rotateImg 1s linear infinite;
+}
+
+@keyframes rotateImg {
+    from {
+        transform: rotate(360deg);
+    }
+
+    to {
+        transform: rotate(0deg);
+    }
+}
+
+/* Breite der Scrollleiste */
+::-webkit-scrollbar {
+    width: 20px;
+}
+
+/* Hintergrundfarbe der Scrollleiste */
+::-webkit-scrollbar-track {
+    background: #0C1D27;
+}
+
+/* Farbe des Scrollbalkens */
+::-webkit-scrollbar-thumb {
+    background: #FE3640;
+    border-radius: 10px;
+}
+
+/* Farbe des Scrollbalken bei Mausüberfahrt */
+::-webkit-scrollbar-thumb:hover {
+    background: #8e2d32;
+}
+
+/*///////////////////////// Start responsive Code ////////////////////////////*/
+
+@media (max-width: 400px) {
+    .type{
+        font-size: 14px;
+        height: 20px;
+        width: 40px;
+    }
+
+    h1 {
+        font-size: 22px;
+    }
+
+    progress {
+        width: 90px;
+    }
 }

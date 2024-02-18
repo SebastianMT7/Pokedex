@@ -18,7 +18,8 @@
 <body onload="init()">
 
   <nav class="navBar">
-    <div class="searchsection"><input type="text" placeholder="Search..">
+    <div class="searchsection">
+      <input id="search" onkeyup="search(this.value)" type="text" placeholder="Search..">
       <img src="./img/search.png" alt="searchicon">
     </div>
   </nav>
@@ -29,7 +30,9 @@
   </section>
 
   <!--beddb-->
-  <div id="overallDetailCard"></div>
-</body>
-
+  <div id="openedDetailCard"></div>
+  <div id="loadingScreen">
+    <img id="loadingImg" src="./img/loading.png" alt="loadingImg">
+  </div>
+</body>>
 </html>

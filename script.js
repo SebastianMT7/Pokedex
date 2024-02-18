@@ -21,9 +21,27 @@ async function init() {
 
 async function loadPokedex() {
   for (let i = 0; i < allPokemon.length; i++) {
-    //let currentPokemon = allPokemon[i];
     document.getElementById('pokedex').innerHTML += cardsHTML(i);
-    cardsColor(i);
+  }
+  document.getElementById('loadingScreen').style.display = 'none';
+  document.getElementById('openedDetailCard').style.display = 'none';
+}
+
+function morePokemon() {
+  document.getElementById('loadingScreen').style.display = 'flex';
+  maxLoad = maxLoad + 3;
+  document.getElementById('pokedex').innerHTML = ''; //läd alle cards neu -> anpassen!!
+  allPokemon.length = 0;
+  init();
+}
+
+function search(input) {
+  document.getElementById('pokedex').innerHTML = '';
+  for (let i = 0; i < allPokemon.length; i++) {
+    let pokeName = allPokemon[i]['name'];
+    if (pokeName.includes(input.toLowerCase())) {
+      document.getElementById('pokedex').innerHTML += cardsHTML(i);
+    }
   }
 }
 
@@ -45,17 +63,10 @@ function typeRender(i) {
 
 }
 
-function morePokemon() {
-  maxLoad = maxLoad + 1;
-  document.getElementById('pokedex').innerHTML = ''; //läd alle cards neu -> anpassen!!
-  loadPokedex();//eig init()
-}
-
 function cardsHTML(i) {
   let pokeName = allPokemon[i]['name'];
   let pokeId = allPokemon[i]['id']
   let pokeImg = allPokemon[i]['sprites']['other']['official-artwork']['front_default'];
-  console.log('currentpoke', allPokemon[i]); //wieder löschen!!
 
   return `        
     <div onclick="showDetailCard(${i})" class="card ${cardsColor([i])}">
@@ -75,9 +86,10 @@ function showDetailCard(i) {
   let img = allPokemon[i]['sprites']["other"]["official-artwork"]["front_default"]
   let name = allPokemon[i]['name'];
   let id = allPokemon[i]['id']
+  document.getElementById('openedDetailCard').style.display = 'flex';
 
-  document.getElementById(`overallDetailCard`).innerHTML = `
-  
+  document.getElementById(`openedDetailCard`).innerHTML = `
+  <div class="overallDetailCard">
       <div class="detailCard ${cardsColor([i])}">
       <div class="closeDetailCard" onclick="closeDetailCard()">X</div>
       <div class="cardTop">
@@ -86,23 +98,27 @@ function showDetailCard(i) {
       </div>
       <div class="detailType">${typeRender(i)}</div>
       <div class="imgPositiion">
+        <img class="arrowImg" onclick="previewPokemon(${i})" src=./img/arrow_left.png alt="arrow">
         <img class="detailImg" id="PkmDetailImg" src=${img} alt="Pokemon img">
+        <img class="arrowImg" onclick="nextPokemon(${i})" src=./img/arrow_right.png alt="arrow">
       </div>
     </div>
     <div class="infoContainer">
       <div class="infoMenü">
         <span onclick="showSpecs(${i})">About</span>
         <span onclick="showStats(${i})">Base Stats</span>
-        <span onclick="showEvo(${i})">Evolution</span>
         <span onclick="showMoves(${i})">Moves</span>
       </div>
       <div id="detailContent">
       </div>
     </div>
+    </div>
   `;
   cardsColor(i);
   showSpecs(i);
 }
+
+//<span onclick="showEvo(${i})">Evolution</span>
 
 function showSpecs(i) {
   let height = allPokemon[i]['height'];
@@ -160,17 +176,20 @@ async function showEvo(i) {
   let EvoURL = await fetch(currentPokemonJSON['evolution_chain']['url']);
   EvoJSON = await EvoURL.json();
 
-  let Evo_1Url = await fetch(EvoJSON['chain']['evolves_to']['0']['species']['url']);//
+  let Evo_1Url = await fetch(EvoJSON['chain']['evolves_to']['0']['species']['url']);
   Evo_1JSON = await Evo_1Url.json();
 
   Evo_1Name = Evo_1JSON['name']
   Evo_1Img = Evo_1JSON['name']
 
-  console.log('1', EvoJSO); //wieder löschen!!
+  
+  console.log('1', EvoJSON); //wieder löschen!!
   console.log('url', Evo_1JSON); //wieder löschen!!
   console.log('Evo', Evo_1Name); //wieder löschen!!
   document.getElementById('detailContent').innerHTML = '';
 }
+
+
 //let url = pokemonSpezies[0]['evolution_chain']['url'];
 //<p>${responseAsJson['chain']['species']['name']}</p>
 
@@ -184,6 +203,22 @@ function showMoves(i) {
   }
 }
 
+function nextPokemon(i) {
+  i++;
+  if (i >= allPokemon.length) {
+    i = 0;
+  }
+  showDetailCard(i);
+}
+
+function previewPokemon(i) {
+  i--;
+  if (i < 0) {
+    i = allPokemon.length - 1;
+  }
+  showDetailCard(i);
+}
+
 function correctedSpec(spec) {
   let result = spec / 10;
   let newSpec = JSON.stringify(result);
@@ -192,7 +227,8 @@ function correctedSpec(spec) {
 }
 
 function closeDetailCard() {
-  document.getElementById(`overallDetailCard`).innerHTML = '';
+  document.getElementById(`openedDetailCard`).innerHTML = '';
+  document.getElementById('openedDetailCard').style.display = 'none';
 }
 
 function correctedId(id) {
