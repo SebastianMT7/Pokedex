@@ -16,7 +16,7 @@ async function init() {
     let loadedPokemon = await loadData(`${url}${j}`);
     allPokemon.push(loadedPokemon);
   }
-  loadPokedex();
+    loadPokedex();
 }
 
 async function loadPokedex() {
@@ -29,8 +29,8 @@ async function loadPokedex() {
 
 function morePokemon() {
   document.getElementById('loadingScreen').style.display = 'flex';
-  maxLoad = maxLoad + 3;
-  document.getElementById('pokedex').innerHTML = ''; //läd alle cards neu -> anpassen!!
+  maxLoad = maxLoad + 5;
+  document.getElementById('pokedex').innerHTML = ''; 
   allPokemon.length = 0;
   init();
 }
@@ -60,26 +60,6 @@ function typeRender(i) {
     `;
   }
   return HTML;
-
-}
-
-function cardsHTML(i) {
-  let pokeName = allPokemon[i]['name'];
-  let pokeId = allPokemon[i]['id']
-  let pokeImg = allPokemon[i]['sprites']['other']['official-artwork']['front_default'];
-
-  return `        
-    <div onclick="showDetailCard(${i})" class="card ${cardsColor([i])}">
-      <div class="cardTop">
-        <h1>${upperCase(pokeName)}</h1>
-        <span>#${correctedId(pokeId)}</span>
-      </div>
-      <div class="cardBottom">
-        <div id="pokeTypes" class="cardType">${typeRender(i)}</div>
-        <img src=${pokeImg} alt="Pokemon img">
-      </div>
-    </div>
-      `;
 }
 
 function showDetailCard(i) {
@@ -88,37 +68,11 @@ function showDetailCard(i) {
   let id = allPokemon[i]['id']
   document.getElementById('openedDetailCard').style.display = 'flex';
 
-  document.getElementById(`openedDetailCard`).innerHTML = `
-  <div class="overallDetailCard">
-      <div class="detailCard ${cardsColor([i])}">
-      <div class="closeDetailCard" onclick="closeDetailCard()">X</div>
-      <div class="cardTop">
-        <h1>${upperCase(name)}</h1>
-        <span>#${correctedId(id)}</span>
-      </div>
-      <div class="detailType">${typeRender(i)}</div>
-      <div class="imgPositiion">
-        <img class="arrowImg" onclick="previewPokemon(${i})" src=./img/arrow_left.png alt="arrow">
-        <img class="detailImg" id="PkmDetailImg" src=${img} alt="Pokemon img">
-        <img class="arrowImg" onclick="nextPokemon(${i})" src=./img/arrow_right.png alt="arrow">
-      </div>
-    </div>
-    <div class="infoContainer">
-      <div class="infoMenü">
-        <span onclick="showSpecs(${i})">About</span>
-        <span onclick="showStats(${i})">Base Stats</span>
-        <span onclick="showMoves(${i})">Moves</span>
-      </div>
-      <div id="detailContent">
-      </div>
-    </div>
-    </div>
-  `;
+  document.getElementById(`openedDetailCard`).innerHTML = DetailCardHTML(i,img, name, id);
   cardsColor(i);
   showSpecs(i);
 }
 
-//<span onclick="showEvo(${i})">Evolution</span>
 
 function showSpecs(i) {
   let height = allPokemon[i]['height'];
@@ -127,23 +81,7 @@ function showSpecs(i) {
   let ability_2 = allPokemon[i]['abilities']['1']['ability']['name'];
 
   document.getElementById('detailContent').innerHTML = '';
-  document.getElementById('detailContent').innerHTML = `
-  
-  <table>
-    <tr>
-      <td class="tdAbout">Height</td>
-     <td class="tdSpecs">${correctedSpec(height)}m</td>
-    </tr>
-    <tr>
-      <td class="tdAbout">Weight</td>
-      <td class="tdSpecs">${correctedSpec(weight)}kg</td>
-    </tr>
-    <tr>
-      <td class="tdAbout">Abilities</td>
-     <td class="tdSpecs">${upperCase(ability_1)}, ${upperCase(ability_2)}</td>
-    </tr>
-  </table>  
-  `;
+  document.getElementById('detailContent').innerHTML = specsHTML(height, weight, ability_1, ability_2)
 }
 
 function showStats(i) {
@@ -154,20 +92,8 @@ function showStats(i) {
   for (let y = 0; y < currentPokemon.length; y++) {
     let statName = upperCase(currentPokemon[y]['stat']['name']);
     let statNumber = currentPokemon[y]['base_stat'];
-
     document.getElementById('statTable').innerHTML += statsHTML(statName, statNumber);
   }
-}
-
-function statsHTML(name, number) {
-  return ` 
-    <td class="tdAbout">${name}</td>        
-    <td id="specNumber"><label>${number}</label></td>
-    <td>
-      <progress max="200" value="${number}"></progress> 
-    </td>   
-   `;
-  //max evtl auf 255 -> laut inet höchste base stat nummer
 }
 
 async function showEvo(i) {
@@ -188,10 +114,6 @@ async function showEvo(i) {
   console.log('Evo', Evo_1Name); //wieder löschen!!
   document.getElementById('detailContent').innerHTML = '';
 }
-
-
-//let url = pokemonSpezies[0]['evolution_chain']['url'];
-//<p>${responseAsJson['chain']['species']['name']}</p>
 
 function showMoves(i) {
   document.getElementById('detailContent').innerHTML = '';

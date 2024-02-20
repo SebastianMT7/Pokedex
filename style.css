@@ -35,7 +35,6 @@ body {
 }
 
 .card {
-    background-color: #FB6C6C;
     color: white;
     display: flex;
     flex-direction: column;
@@ -54,6 +53,7 @@ body {
 .card:hover {
     cursor: pointer;
     filter: drop-shadow(0px 0px 4px #FFFFFF);
+    transform: scale(1.05);
 }
 
 .cardTop {
@@ -204,7 +204,7 @@ body {
 
 #detailContent {
     padding: 25px;
-    height: 230px;
+    max-height: 230px;
 }
 
 .tdAbout {
@@ -236,7 +236,7 @@ progress {
 }
 
 .movesDiv {
-    background-color: black;
+    background-color: rgb(176, 173, 173);
     color: white;
     border-radius: 43px;
     padding: 8px 12px;
