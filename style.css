@@ -31,7 +31,9 @@ body {
     /*# spricht eine ID an und keine Klasse!!*/
     display: flex;
     flex-wrap: wrap;
-    margin: 200px 30px 0 30px;
+    justify-content: center;
+    margin: 120px 30px 0 30px;
+    gap: 30px;
 }
 
 .card {
@@ -42,7 +44,6 @@ body {
     padding: 10px 24px 0 24px;
     border-radius: 20px;
     width: 300px;
-    margin: 0 30px 30px 0;
     background-image: url(/img/bg-cards.png);
     background-repeat: no-repeat;
     background-size: 190px;
@@ -105,7 +106,7 @@ body {
 .BtnSection {
     display: flex;
     justify-content: center;
-    margin: 20px 0 50px 0;
+    margin: 30px 0 50px 0;
 }
 
 #BtnLoad {
@@ -298,6 +299,10 @@ progress {
 
 /*///////////////////////// Start responsive Code ////////////////////////////*/
 
+@media (max-width: 814px) {
+
+    
+} 
 @media (max-width: 400px) {
     .type{
         font-size: 14px;

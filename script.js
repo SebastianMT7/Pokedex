@@ -1,7 +1,7 @@
 
 let url = 'https://pokeapi.co/api/v2/pokemon/';//https://pokeapi.co/api/v2/pokemon/?limit=${maxLoad}
 let allPokemon = [];
-let maxLoad = 10;
+let maxLoad = 20;
 let minLoad = 1;
 
 
@@ -29,7 +29,7 @@ async function loadPokedex() {
 
 function morePokemon() {
   document.getElementById('loadingScreen').style.display = 'flex';
-  maxLoad = maxLoad + 5;
+  maxLoad = maxLoad + 10;
   document.getElementById('pokedex').innerHTML = ''; 
   allPokemon.length = 0;
   init();
